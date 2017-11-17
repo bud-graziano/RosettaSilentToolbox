@@ -132,8 +132,9 @@ def logo_plot( df, column_name, ref_seq=None, outfile=None, key_residues=None, c
     for scores in wdata:
         y = 0
         for base, score in scores:
-            _letterAt(base, x,y, score, ax, globscale, LETTERS, color_scheme(colors))
-            y += score
+            if base != "-":
+                _letterAt(base, x,y, score, ax, globscale, LETTERS, color_scheme(colors))
+                y += score
         x += 1
         maxi = max(maxi, y)
     if outfile is not None:

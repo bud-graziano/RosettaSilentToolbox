@@ -12,8 +12,8 @@ def _extract_key_residue_sequence( seq, key_residues=None ):
 
 def _calculate_linear_sequence_similarity( qseq, rseq, matrix, key_residues=None ):
     score = 0;
-    qseq = _extract_key_residue_sequence( qseq, key_residues )
-    rseq = _extract_key_residue_sequence( rseq, key_residues )
+    qseq = _extract_key_residue_sequence( qseq, key_residues ).replace("-", "*")
+    rseq = _extract_key_residue_sequence( rseq, key_residues ).replace("-", "*")
     assert len(qseq) == len(rseq)
     for i in range(len(qseq)):
         score += matrix[qseq[i]][rseq[i]]
@@ -21,8 +21,8 @@ def _calculate_linear_sequence_similarity( qseq, rseq, matrix, key_residues=None
 
 def _calculate_binary_sequence_similarity( qseq, rseq, matrix, key_residues=None ):
     new_seq = ""
-    qseq = _extract_key_residue_sequence( qseq, key_residues )
-    rseq = _extract_key_residue_sequence( rseq, key_residues )
+    qseq = _extract_key_residue_sequence( qseq, key_residues ).replace("-", "*")
+    rseq = _extract_key_residue_sequence( rseq, key_residues ).replace("-", "*")
     assert len(qseq) == len(rseq)
     for i in range(len(qseq)):
         if  matrix[qseq[i]][rseq[i]] >= 1:
@@ -81,7 +81,8 @@ def sequence_frequency_matrix( series, seq_column="sequence" ):
         'C' : [], 'D' : [], 'S' : [], 'Q' : [], 'K' : [],
         'I' : [], 'P' : [], 'T' : [], 'F' : [], 'N' : [],
         'G' : [], 'H' : [], 'L' : [], 'R' : [], 'W' : [],
-        'A' : [], 'V' : [], 'E' : [], 'Y' : [], 'M' : []
+        'A' : [], 'V' : [], 'E' : [], 'Y' : [], 'M' : [],
+        "-" : []
     }
 
     for x in range(len(sserie[0])):
@@ -89,7 +90,10 @@ def sequence_frequency_matrix( series, seq_column="sequence" ):
             table[k].append(float(0))
         for y in range(len(sserie)):
             aa = sserie[y][x]
-            table[aa][-1] += float(1)
+            if aa in table:
+                table[aa][-1] += float(1)
+            else:
+                table["-"][-1] += float(1)
     for k in table:
         for x in range(len(table[k])):
             if table[k][x] != 0:
