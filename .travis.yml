@@ -5,8 +5,8 @@ sudo: false
 # safelist
 branches:
   only:
-  - master
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+    - master
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 matrix:
   include:
